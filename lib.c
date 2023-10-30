@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 // funcao para listar todas as tarefas existentes
-void listTasks(struct Task *tasks, int taskCount) {
+void listTasks(Task *tasks, int taskCount) {
   printf("\nLista de Tarefas:\n");
   for (int i = 0; i < taskCount; i++) { // Laço de repeticao para iterar sobre
                                         // os dados da lista e printar eles
@@ -15,7 +15,7 @@ void listTasks(struct Task *tasks, int taskCount) {
 }
 
 // para escrita e leitura em binario
-extern struct Task tasks[100]; // Declarando as variaveis como extern
+extern Task tasks[100]; // Declarando as variaveis como extern
 extern int taskCount;          // Declarando as variaveis como extern
 
 // funcao para escrita do arquivo em binario
@@ -28,7 +28,7 @@ void Escreve_bin() {
   }
 
   // Escreve os dados das tarefas no arquivo
-  size_t result = fwrite(tasks, sizeof(struct Task), taskCount, arquivo);
+  size_t result = fwrite(tasks, sizeof(Task), taskCount, arquivo);
 
   // tratamento de erros
   if (result != taskCount) {
@@ -62,10 +62,10 @@ void Ler_bin() {
       SEEK_SET); //  Move o cursor de leitura de volta para o início do arquivo
 
   // depois calculamos o numero de tarefas com base no tamanho do arquivo
-  taskCount = tamanhoArquivo / sizeof(struct Task);
+  taskCount = tamanhoArquivo / sizeof(Task);
 
   // Le os dados do arquivo e armazena no array original
-  size_t result = fread(tasks, sizeof(struct Task), taskCount, arquivo);
+  size_t result = fread(tasks, sizeof(Task), taskCount, arquivo);
 
   if (result != taskCount) {
     perror("Erro ao ler o arquivo");
@@ -83,4 +83,24 @@ void limparBuffer() {
     // Le e ignora os caracteres do buffer de entrada até encontrar "\n " ou
     // atingir o final do arquivo (EOF)
   }
+}
+
+int editaTarefa(Task *tasks, int taskCount){
+  return 0;
+}
+
+int prioridade(Task *tasks, int taskCount){
+  return 0;
+}
+
+int status(Task *tasks, int taskCount){
+  return 0;
+}
+
+int categoria(Task *tasks, int taskCount){
+  return 0;
+}
+
+int exportar(Task *tasks, int taskCount){
+  return 0;
 }
