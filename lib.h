@@ -23,6 +23,7 @@ int prioridade(ListadeTarefas lt);
 int status(ListadeTarefas lt);
 int categoria(ListadeTarefas lt);
 int prioridade_categoria(ListadeTarefas lt);
+int deletar(ListadeTarefas *lt);
 
 // To do
 int exportar(ListadeTarefas lt);
