@@ -13,7 +13,7 @@ void limparBuffer() {
 
 // funcao para criar uma nova tarefa
 int NovaTarefa(ListadeTarefas *lt) {
-  printf("\n_________________________________________\n");
+    printf("\n_________________________________________\n");
     printf("____________Cadastrar Tarefa:_____________\n");
 
     Task *newTask = &(lt -> Task[lt -> taskCount]); // nova tarefa criada
@@ -49,7 +49,9 @@ int NovaTarefa(ListadeTarefas *lt) {
 
 // funcao para listar todas as tarefas existentes
 int listTasks(ListadeTarefas lt) {
-  printf("\nLista de Tarefas:\n");
+  printf("\n_________________________________________\n");
+  printf("____________Lista de Tarefas:_____________\n");
+
   for (int i = 0; i < lt.taskCount; i++) { // Laço de repeticao para iterar sobre
     // os dados da lista e printar eles
     printf("Tarefa %d:\n", i + 1);
@@ -148,7 +150,41 @@ int editaTarefa(ListadeTarefas *lt){
 }
 
 // funcao para filtrar tarefas por prioridade
-int prioridade(ListadeTarefas *lt){
+int prioridade(ListadeTarefas lt){
+    printf("\n_________________________________________\n");
+    printf("____________Filtrar por Prioridade:_____________\n");
+
+    int target_prioridade;
+    printf("digite uma prioridade entre 0 e 10:\n-> ");
+    scanf("%d", &target_prioridade);
+
+    for (int i = 0; i < lt.taskCount; i++)
+    {
+      if (lt.Task[i].prioridade == target_prioridade)
+      {
+        printf("Tarefa %d:\n", i + 1);
+        printf("\nDescricao: %s\n", lt.Task[i].descricao);
+        printf("Categoria: %s\n", lt.Task[i].categoria);
+        printf("Prioridade: %d\n", lt.Task[i].prioridade);
+        if (lt.Task[i].status == 0)
+        {
+          printf("Status: Pendente\n");
+        }
+        else if (lt.Task[i].status == 1)
+        {
+          printf("Status: Em andamento\n");
+        }
+        else if (lt.Task[i].status == 2)
+        {
+          printf("Status: Concluida\n");
+        }
+        else if (lt.Task[i].status == 3)
+        {
+          printf("Status: Cancelada\n");
+        }
+        printf("\n");
+      }
+    }
   return 0;
 }
 

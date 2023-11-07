@@ -35,12 +35,13 @@ int main() {
       break;
     case 2: // editar tarefa
       editaTarefa(&lt);
+      break;
     case 3: // listar tarefas
       listTasks(lt);
       break;
-
     case 4: // Filtrar tarefa por prioridade
-      
+      prioridade(lt);
+      break;
     case 5: // Filtrar tarefa por estado
 
     case 6: // Filtrar tarefa por categoria
