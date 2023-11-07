@@ -22,6 +22,6 @@ void limparBuffer();
 int prioridade(ListadeTarefas lt);
 
 // To do
-// int status(Task *tasks, int taskCount);
+int status(ListadeTarefas lt);
 // int categoria(Task *tasks, int taskCount);
 // int exportar(Task *tasks, int taskCount);
