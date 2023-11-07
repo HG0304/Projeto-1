@@ -9,19 +9,19 @@ typedef struct {
 // Struct que armazena as tarefas
 typedef struct {
   Task Task[100]; // array que armazena as 100 tarefas
-  int taskCount;  
+  int taskCount;  // contador de tarefas
 } ListadeTarefas;
 
 // Funções
 int NovaTarefa(ListadeTarefas *lt);
+int editaTarefa(ListadeTarefas *lt);
 int listTasks(ListadeTarefas lt);
 void Escreve_bin();
 void Ler_bin();
 void limparBuffer();
 
 // To do
-// int editaTarefa(Task *tasks, int taskCount);
-// int prioridade(Task *tasks, int taskCount);
+//int prioridade(Task *tasks, int taskCount);
 // int status(Task *tasks, int taskCount);
 // int categoria(Task *tasks, int taskCount);
 // int exportar(Task *tasks, int taskCount);

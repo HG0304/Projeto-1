@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
-
 int main() {
   //Ler_bin();
   int choice;
@@ -36,7 +34,7 @@ int main() {
       NovaTarefa(&lt);
       break;
     case 2: // editar tarefa
-
+      editaTarefa(&lt);
     case 3: // listar tarefas
       listTasks(lt);
       break;
