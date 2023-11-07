@@ -21,7 +21,8 @@ void Ler_bin();
 void limparBuffer();
 int prioridade(ListadeTarefas lt);
 int status(ListadeTarefas lt);
+int categoria(ListadeTarefas lt);
+int prioridade_categoria(ListadeTarefas lt);
 
 // To do
-int categoria(ListadeTarefas lt);
 int exportar(ListadeTarefas lt);

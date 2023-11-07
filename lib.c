@@ -52,8 +52,7 @@ int listTasks(ListadeTarefas lt) {
   printf("\n_________________________________________\n");
   printf("____________Lista de Tarefas:_____________\n");
 
-  for (int i = 0; i < lt.taskCount; i++) { // Laço de repeticao para iterar sobre
-    // os dados da lista e printar eles
+  for (int i = 0; i < lt.taskCount; i++) { // Laço de repeticao para iterar sobre os dados da lista e printar eles
     printf("Tarefa %d:\n", i + 1);
     printf("\nDescricao: %s\n", lt.Task[i].descricao);
     printf("Categoria: %s\n", lt.Task[i].categoria);
@@ -158,6 +157,7 @@ int prioridade(ListadeTarefas lt){
     printf("digite uma prioridade entre 0 e 10:\n-> ");
     scanf("%d", &target_prioridade);
 
+    int print = 0;
     for (int i = 0; i < lt.taskCount; i++)
     {
       if (lt.Task[i].prioridade == target_prioridade)
@@ -183,7 +183,11 @@ int prioridade(ListadeTarefas lt){
           printf("Status: Cancelada\n");
         }
         printf("\n");
+        print++;
       }
+    }
+    if (print == 0) {
+    printf("Nao ha tarefas com essa prioridade\n");
     }
   return 0;
 }
@@ -203,6 +207,7 @@ int status(ListadeTarefas lt){
   scanf("%d", &target_status);
   target_status--;
 
+  int print = 0;
   for (int i = 0; i < lt.taskCount; i++)
   {
     if (lt.Task[i].status == target_status)
@@ -228,7 +233,11 @@ int status(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+      print++;
     }
+  }
+  if (print == 0) {
+    printf("Nao ha tarefas com esse status\n");
   }
   return 0;
 }
@@ -244,6 +253,7 @@ int categoria(ListadeTarefas lt){
   fgets(target_categoria, sizeof(target_categoria), stdin);
   target_categoria[strcspn(target_categoria, "\n")] = 0;
 
+  int print = 0;
   for (int i = 0; i < lt.taskCount; i++)
   {
     if (strcmp(lt.Task[i].categoria, target_categoria) == 0)
@@ -269,7 +279,63 @@ int categoria(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+      print++;
     }
+  }
+  if (print == 0) {
+    printf("Nao ha tarefas com essa categoria\n");
+    }
+  return 0;
+}
+
+// funcao para filtrar tarefas por prioridade e categoria
+int prioridade_categoria(ListadeTarefas lt){
+  printf("\n_________________________________________\n");
+  printf("____________Filtrar por Prioridade e Categoria:_____________\n");
+
+  char target_categoria[100];
+  limparBuffer();
+  printf("Digite a categoria que deseja filtrar:\n-> ");
+  fgets(target_categoria, sizeof(target_categoria), stdin);
+  target_categoria[strcspn(target_categoria, "\n")] = 0;
+
+  int target_prioridade;
+  do { // laco para garantir que a prioridade estara entre 0 e 10
+    printf("digite uma prioridade entre 0 e 10:\n-> ");
+    scanf("%d", &target_prioridade);
+  } while (target_prioridade < 0 || target_prioridade > 10);
+  
+  int print = 0;
+  for (int i = 0; i < lt.taskCount; i++)
+  {
+    if (strcmp(lt.Task[i].categoria, target_categoria) == 0 && lt.Task[i].prioridade == target_prioridade)
+    {
+      printf("Tarefa %d:\n", i + 1);
+      printf("\nDescricao: %s\n", lt.Task[i].descricao);
+      printf("Categoria: %s\n", lt.Task[i].categoria);
+      printf("Prioridade: %d\n", lt.Task[i].prioridade);
+      if (lt.Task[i].status == 0)
+      {
+        printf("Status: Pendente\n");
+      }
+      else if (lt.Task[i].status == 1)
+      {
+        printf("Status: Em andamento\n");
+      }
+      else if (lt.Task[i].status == 2)
+      {
+        printf("Status: Concluida\n");
+      }
+      else if (lt.Task[i].status == 3)
+      {
+        printf("Status: Cancelada\n");
+      }
+      printf("\n");
+      print++;
+    }
+  }
+  if (print == 0) {
+  printf("Nao ha tarefas com essa categoria e/ou prioridade\n");
   }
   return 0;
 }
