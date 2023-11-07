@@ -20,8 +20,8 @@ void Escreve_bin();
 void Ler_bin();
 void limparBuffer();
 int prioridade(ListadeTarefas lt);
+int status(ListadeTarefas lt);
 
 // To do
-int status(ListadeTarefas lt);
-// int categoria(Task *tasks, int taskCount);
-// int exportar(Task *tasks, int taskCount);
+int categoria(ListadeTarefas lt);
+int exportar(ListadeTarefas lt);
