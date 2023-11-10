@@ -1,23 +1,176 @@
 #include "lib.h"
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Funcao para limpar o buffer e evitar erros na armazenagem dos dados e acumulo de lixo na memoria
+void limparBuffer() {
+    // Le e ignora os caracteres do buffer de entrada até encontrar "\n " ou atingir o final do arquivo (EOF)
+  int c;
+  while ((c = getchar()) != '\n' && c != EOF) {
+  }
+}
+
+// funcao para criar uma nova tarefa
+int NovaTarefa(ListadeTarefas *lt) {
+  printf("\n_________________________________________\n");
+    printf("____________Cadastrar Tarefa:_____________\n");
+
+    Task *newTask = &(lt -> Task[lt -> taskCount]); // nova tarefa criada
+    
+    limparBuffer();
+    printf("Descricao:\n-> ");
+    fgets(newTask -> descricao, sizeof(newTask -> descricao), stdin);
+
+    // Remove the newline character at the end of the string
+    newTask -> descricao[strcspn(newTask -> descricao, "\n")] = 0;    
+
+    limparBuffer();
+    printf("Categoria:\n-> ");
+    fgets(newTask -> categoria, sizeof(newTask -> categoria), stdin);
+    newTask -> categoria[strcspn(newTask -> categoria, "\n")] = 0;
+
+    char prioridadeStr[11];
+    do { // laco para garantir que a prioridade estara entre 0 e 10
+        printf("digite uma prioridade entre 0 e 10:\n-> ");
+        fgets(prioridadeStr, sizeof(prioridadeStr), stdin);
+        newTask -> prioridade = atoi(prioridadeStr);
+    } while (newTask -> prioridade < 0 || newTask -> prioridade > 10);
+
+    // status da tarefa criada
+    newTask -> status = 0;
+    // incrementa o contador de tarefas
+    lt -> taskCount++;
+
+    printf("Tarefa cadastrada com sucesso!\n");
+    // Escreve_bin(); // escreve no arquivo
+  return 0;
+}
 
 // funcao para listar todas as tarefas existentes
-void listTasks(struct Task *tasks, int taskCount) {
+int listTasks(ListadeTarefas lt) {
   printf("\nLista de Tarefas:\n");
-  for (int i = 0; i < taskCount; i++) { // Laço de repeticao para iterar sobre
-                                        // os dados da lista e printar eles
+  for (int i = 0; i < lt.taskCount; i++) { // Laço de repeticao para iterar sobre
+    // os dados da lista e printar eles
     printf("Tarefa %d:\n", i + 1);
-    printf("\nDescricao: %s\n", tasks[i].descricao);
-    printf("Categoria: %s\n", tasks[i].categoria);
-    printf("Prioridade: %d\n", tasks[i].prioridade);
+    printf("\nDescricao: %s\n", lt.Task[i].descricao);
+    printf("Categoria: %s\n", lt.Task[i].categoria);
+    printf("Prioridade: %d\n", lt.Task[i].prioridade);
+    if (lt.Task[i].status == 0)
+    {
+      printf("Status: Pendente\n");
+    }
+    else if (lt.Task[i].status == 1)
+    {
+      printf("Status: Em andamento\n");
+    }
+    else if (lt.Task[i].status == 2)
+    {
+      printf("Status: Concluida\n");
+    }
+    else if (lt.Task[i].status == 3)
+    {
+      printf("Status: Cancelada\n");
+    }
+    
     printf("\n");
   }
 }
 
-// para escrita e leitura em binario
-extern struct Task tasks[100]; // Declarando as variaveis como extern
-extern int taskCount;          // Declarando as variaveis como extern
+// funcao para editar uma tarefa
+int editaTarefa(ListadeTarefas *lt){
+    printf("\n_________________________________________\n");
+    printf("____________Editar Tarefa:_____________\n");
 
+    listTasks(*lt);
+
+    limparBuffer();
+    int index;
+    printf("indique o indicie de qual tarefa voce deseja alterar:\n-> ");
+    scanf("%d", &index);
+    index--;
+
+    Task *EditTask = &(lt -> Task[index]); // tarefa desejada armazenada na variavel EditTask   
+
+    limparBuffer();
+
+    printf("Agora digite qual campo deseja alterar:\n");
+    printf("1 - Descricao\n");
+    printf("2 - Categoria\n");
+    printf("3 - Prioridade\n");
+    printf("4 - Status\n");
+
+    int opcao;
+    printf("-> ");
+    scanf("%d", &opcao);
+
+    switch (opcao)
+    {
+    case 1:
+      limparBuffer();
+      printf("Descricao:\n-> ");
+      fgets(EditTask -> descricao, sizeof(EditTask -> descricao), stdin);
+      EditTask -> descricao[strcspn(EditTask -> descricao, "\n")] = 0;
+      break;
+    case 2:
+      limparBuffer();
+      printf("Categoria:\n-> ");
+      fgets(EditTask -> categoria, sizeof(EditTask -> categoria), stdin);
+      EditTask -> categoria[strcspn(EditTask -> categoria, "\n")] = 0;
+      break;
+    case 3:
+      limparBuffer();
+      char prioridadeStr[11];
+      do { // laco para garantir que a prioridade estara entre 0 e 10
+        printf("digite uma prioridade entre 0 e 10:\n-> ");
+        fgets(prioridadeStr, sizeof(prioridadeStr), stdin);
+        EditTask -> prioridade = atoi(prioridadeStr);
+      } while (EditTask -> prioridade < 0 || EditTask -> prioridade > 10);
+      break;
+    case 4:
+      limparBuffer();
+      int prioridade_status;
+      printf("Status:\n");
+      printf("1 - Pendente\n");
+      printf("2 - Em andamento\n");
+      printf("3 - Concluida\n");
+      printf("4 - Cancelada\n");
+      printf("-> ");
+      scanf("%d", &prioridade_status);
+      prioridade_status--;
+      EditTask -> status = prioridade_status;
+      break;
+    default:
+      printf("Opcao invalida!\n");
+      break;
+    }
+  return 0;
+}
+
+// funcao para filtrar tarefas por prioridade
+int prioridade(ListadeTarefas *lt){
+  return 0;
+}
+
+// funcao para filtrar tarefas por status
+int status(ListadeTarefas *lt){
+  return 0;
+}
+
+// funcao para filtrar tarefas por categoria
+int categoria(ListadeTarefas *lt){
+  return 0;
+}
+
+// funcao para filtrar tarefas por prioridade e categoria
+int exportar(ListadeTarefas *lt){
+  return 0;
+}
+
+// para escrita e leitura em binario
+// extern Task tasks[100]; // Declarando as variaveis como extern
+// extern int taskCount;          // Declarando as variaveis como extern
+/*
 // funcao para escrita do arquivo em binario
 void Escreve_bin() {
   FILE *arquivo = fopen("tarefas", "wb"); // Abre o arquivo para escrita binario
@@ -28,7 +181,7 @@ void Escreve_bin() {
   }
 
   // Escreve os dados das tarefas no arquivo
-  size_t result = fwrite(tasks, sizeof(struct Task), taskCount, arquivo);
+  size_t result = fwrite(tasks, sizeof(Task), taskCount, arquivo);
 
   // tratamento de erros
   if (result != taskCount) {
@@ -62,10 +215,10 @@ void Ler_bin() {
       SEEK_SET); //  Move o cursor de leitura de volta para o início do arquivo
 
   // depois calculamos o numero de tarefas com base no tamanho do arquivo
-  taskCount = tamanhoArquivo / sizeof(struct Task);
+  taskCount = tamanhoArquivo / sizeof(Task);
 
   // Le os dados do arquivo e armazena no array original
-  size_t result = fread(tasks, sizeof(struct Task), taskCount, arquivo);
+  size_t result = fread(tasks, sizeof(Task), taskCount, arquivo);
 
   if (result != taskCount) {
     perror("Erro ao ler o arquivo");
@@ -75,12 +228,4 @@ void Ler_bin() {
   fclose(arquivo);
 }
 
-// Funcao para limpar o buffer e evitar erros na armazenagem dos dados e acumulo
-// de lixo na memoria
-void limparBuffer() {
-  int c;
-  while ((c = getchar()) != '\n' && c != EOF) {
-    // Le e ignora os caracteres do buffer de entrada até encontrar "\n " ou
-    // atingir o final do arquivo (EOF)
-  }
-}
+*/
