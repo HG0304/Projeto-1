@@ -43,9 +43,10 @@ int main() {
       prioridade(lt);
       break;
     case 5: // Filtrar tarefa por estado
-
+      status(lt);
+      break;
     case 6: // Filtrar tarefa por categoria
-
+      
     case 7: // Filtrar tarefa por prioridade e categoria
 
     case 8: // deletar tarefa

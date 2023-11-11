@@ -189,7 +189,47 @@ int prioridade(ListadeTarefas lt){
 }
 
 // funcao para filtrar tarefas por status
-int status(ListadeTarefas *lt){
+int status(ListadeTarefas lt){
+  printf("\n_________________________________________\n");
+  printf("____________Filtrar por Status:_____________\n");
+
+  int target_status;
+  printf("Digite o numero da prioridade que deseja filtrar:\n");
+  printf("1 - Pendente\n");
+  printf("2 - Em andamento\n");
+  printf("3 - Concluida\n");
+  printf("4 - Cancelada\n");
+  printf("-> ");
+  scanf("%d", &target_status);
+  target_status--;
+
+  for (int i = 0; i < lt.taskCount; i++)
+  {
+    if (lt.Task[i].status == target_status)
+    {
+      printf("Tarefa %d:\n", i + 1);
+      printf("\nDescricao: %s\n", lt.Task[i].descricao);
+      printf("Categoria: %s\n", lt.Task[i].categoria);
+      printf("Prioridade: %d\n", lt.Task[i].prioridade);
+      if (lt.Task[i].status == 0)
+      {
+        printf("Status: Pendente\n");
+      }
+      else if (lt.Task[i].status == 1)
+      {
+        printf("Status: Em andamento\n");
+      }
+      else if (lt.Task[i].status == 2)
+      {
+        printf("Status: Concluida\n");
+      }
+      else if (lt.Task[i].status == 3)
+      {
+        printf("Status: Cancelada\n");
+      }
+      printf("\n");
+    }
+  }
   return 0;
 }
 
