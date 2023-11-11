@@ -234,12 +234,48 @@ int status(ListadeTarefas lt){
 }
 
 // funcao para filtrar tarefas por categoria
-int categoria(ListadeTarefas *lt){
+int categoria(ListadeTarefas lt){
+  printf("\n_________________________________________\n");
+  printf("____________Filtrar por Categoria:_____________\n");
+
+  char target_categoria[100];
+  limparBuffer();
+  printf("Digite a categoria que deseja filtrar:\n-> ");
+  fgets(target_categoria, sizeof(target_categoria), stdin);
+  target_categoria[strcspn(target_categoria, "\n")] = 0;
+
+  for (int i = 0; i < lt.taskCount; i++)
+  {
+    if (strcmp(lt.Task[i].categoria, target_categoria) == 0)
+    {
+      printf("Tarefa %d:\n", i + 1);
+      printf("\nDescricao: %s\n", lt.Task[i].descricao);
+      printf("Categoria: %s\n", lt.Task[i].categoria);
+      printf("Prioridade: %d\n", lt.Task[i].prioridade);
+      if (lt.Task[i].status == 0)
+      {
+        printf("Status: Pendente\n");
+      }
+      else if (lt.Task[i].status == 1)
+      {
+        printf("Status: Em andamento\n");
+      }
+      else if (lt.Task[i].status == 2)
+      {
+        printf("Status: Concluida\n");
+      }
+      else if (lt.Task[i].status == 3)
+      {
+        printf("Status: Cancelada\n");
+      }
+      printf("\n");
+    }
+  }
   return 0;
 }
 
 // funcao para filtrar tarefas por prioridade e categoria
-int exportar(ListadeTarefas *lt){
+int exportar(ListadeTarefas lt){
   return 0;
 }
 
