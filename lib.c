@@ -383,71 +383,73 @@ int deletar(ListadeTarefas *lt) {
 
 }
 
-// funcao para filtrar tarefas por prioridade e categoria
-int exportar(ListadeTarefas lt){
+// // funcao para criar um arquivo txt com o nome da tarefa
+// void *cria_txt(opcao) {
+//   char path[40];
+//   sprintf(path, "Tarefas/%s.txt", opcao);
+
+//   // Cria o arquivo com o nome da tarefa segundo a opcao escolhida
+//   FILE *extrato = fopen(path, "w");
+
+//   // tratamento de erros
+//   if (extrato == NULL) {
+//     perror("Erro ao criar o arquivo");
+//     return;
+//   }
+
+//   // Escreve as tarefas filtradas no arquivo
+  
+
+//   fclose(extrato);
+//   return 0;
+// }
+
+// funcao para escrita do arquivo em binario
+int Escreve_bin(ListadeTarefas *lt) {
+  FILE *arquivo = fopen("Tarefas/ListaDeTarefas.bin", "wb"); // Abre o arquivo para escrita binario
+
+  // Tratamento de erros
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return 1;
+  }
+
+  // Escreve os dados das tarefas no arquivo
+  for (int i = 0; i < lt->taskCount; i++) {
+    if (lt -> Task[i].descricao[0] != '\0') { // Verifica se a tarefa foi criada
+      fwrite(&(lt -> Task[i]), sizeof(Task), 1, arquivo);
+    }
+  }
+
+  // Fecha o arquivo
+  fclose(arquivo);
   return 0;
 }
 
-// // para escrita e leitura em binario
-//  extern Task tasks[100]; // Declarando as variaveis como extern
-//  extern int taskCount;          // Declarando as variaveis como extern
-
-// // funcao para escrita do arquivo em binario
-// void Escreve_bin() {
-//   FILE *arquivo = fopen("tarefas", "wb"); // Abre o arquivo para escrita binario
-
-//   if (arquivo == NULL) {
-//     perror("Erro ao abrir o arquivo");
-//     return; // Retorna se nao for possível abrir o arquivo
-//   }
-
-//   // Escreve os dados das tarefas no arquivo
-//   size_t result = fwrite(tasks, sizeof(Task), taskCount, arquivo);
-
-//   // tratamento de erros
-//   if (result != taskCount) {
-//     perror("Erro ao escrever no arquivo\n");
-//     fclose(arquivo); // Fecha o arquivo para evitar algum problema com os dados
-//     return;
-//   }
-//   // Fecha o arquivo
-//   fclose(arquivo);
-// }
-
-/*
 // funcao para ler o arquivo
-void Ler_bin() {
-  FILE *arquivo =
-      fopen("tarefas", "rb"); // Abre o arquivo para leitura em binario
+int Ler_bin(ListadeTarefas *lt) {
+  FILE *arquivo = fopen("Tarefas/ListaDeTarefas.bin", "rb"); // Abre o arquivo para leitura em binario
 
   // tratamento de erros
   if (arquivo == NULL) {
     perror("Erro ao abrir o arquivo");
-    return;
+    return 1;
   }
 
   // antes de realizar a leitura do arquivo, precisamos obter o numero de
   // tarefas cadastradas nele, para isso vamos realizar 2 etapas: primeiro vamos
   // obter o tamanho do arquivo
-  fseek(arquivo, 0, SEEK_END); // Move o cursor de leitura para o final do
-                               // arquivo para obter o tamanho do arquivo.
+  fseek(arquivo, 0, SEEK_END); // Move o cursor de leitura para o final do arquivo para obter o tamanho do arquivo.
   long tamanhoArquivo = ftell(arquivo); // Obtém o tamanho do arquivo em bytes
-  fseek(
-      arquivo, 0,
-      SEEK_SET); //  Move o cursor de leitura de volta para o início do arquivo
+  fseek(arquivo, 0, SEEK_SET); //  Move o cursor de leitura de volta para o início do arquivo
 
   // depois calculamos o numero de tarefas com base no tamanho do arquivo
-  taskCount = tamanhoArquivo / sizeof(Task);
+  lt -> taskCount = tamanhoArquivo / sizeof(Task);
 
   // Le os dados do arquivo e armazena no array original
-  size_t result = fread(tasks, sizeof(Task), taskCount, arquivo);
+  fread(lt, sizeof(Task), lt -> taskCount, arquivo);
 
-  if (result != taskCount) {
-    perror("Erro ao ler o arquivo");
-    return;
-  }
   printf("arquivo lido com sucesso");
   fclose(arquivo);
+  return 0;
 }
-
-*/

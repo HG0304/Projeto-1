@@ -1,12 +1,17 @@
 #include "lib.h"
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 
 int main() {
-  //Ler_bin();
   int choice;
   ListadeTarefas lt;
   lt.taskCount = 0;
+
+  Ler_bin(&lt);
+
+  // cria um diretorio para armazenar os arquivos
+  mkdir("Tarefas", 0777);
   
   // Inicio da logica do menu
   do {
@@ -56,7 +61,7 @@ int main() {
       break;  
     case 9:  // sair
       printf("Saindo do programa.\n");
-      //Escreve_bin();
+      Escreve_bin(&lt);
       return 0;
     default:
       printf("Opçao inválida! Tente novamente.\n");
