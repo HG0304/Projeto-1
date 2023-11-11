@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 // Funcao para limpar o buffer e evitar erros na armazenagem dos dados e acumulo de lixo na memoria
 void limparBuffer() {
@@ -52,6 +53,7 @@ int listTasks(ListadeTarefas lt) {
   printf("\n_________________________________________\n");
   printf("____________Lista de Tarefas:_____________\n");
 
+  int print = 0;
   for (int i = 0; i < lt.taskCount; i++) { // Laço de repeticao para iterar sobre os dados da lista e printar eles
     printf("Tarefa %d:\n", i + 1);
     printf("\nDescricao: %s\n", lt.Task[i].descricao);
@@ -73,8 +75,11 @@ int listTasks(ListadeTarefas lt) {
     {
       printf("Status: Cancelada\n");
     }
-    
     printf("\n");
+    print++;
+  }
+  if (print == 0) {
+    printf("Nao ha tarefas cadastradas\n");
   }
 }
 
@@ -340,37 +345,76 @@ int prioridade_categoria(ListadeTarefas lt){
   return 0;
 }
 
+// funcao para deletar uma tarefa
+int deletar(ListadeTarefas *lt) {
+  printf("\n_________________________________________\n");
+  printf("____________Deletar Tarefa:_____________\n");
+
+  listTasks(*lt);
+
+  limparBuffer();
+  int index;
+  printf("indique o indicie de qual tarefa voce deseja deletar:\n-> ");
+  scanf("%d", &index);
+  index--;
+
+  Task *DeleteTask = &(lt -> Task[index]); // tarefa desejada armazenada na variavel DeleteTask   
+
+  // tratamento de erros
+  if (DeleteTask == NULL) {
+    perror("Erro ao deletar tarefa");
+    return -1;
+  }
+  // trata o caso de deletar uma tarefa que nao existe
+  if (index >= lt -> taskCount) {
+    printf("Tarefa nao existe!\n");
+    return -1;
+  }
+
+  limparBuffer();
+
+  printf("A tarefa %d foi deletada com sucesso!\n", index + 1);
+  for (int i = index; i < lt -> taskCount; i++)
+  {
+    lt -> Task[i] = lt -> Task[i + 1];
+  }
+  lt -> taskCount--;
+  return 0;
+
+}
+
 // funcao para filtrar tarefas por prioridade e categoria
 int exportar(ListadeTarefas lt){
   return 0;
 }
 
-// para escrita e leitura em binario
-// extern Task tasks[100]; // Declarando as variaveis como extern
-// extern int taskCount;          // Declarando as variaveis como extern
+// // para escrita e leitura em binario
+//  extern Task tasks[100]; // Declarando as variaveis como extern
+//  extern int taskCount;          // Declarando as variaveis como extern
+
+// // funcao para escrita do arquivo em binario
+// void Escreve_bin() {
+//   FILE *arquivo = fopen("tarefas", "wb"); // Abre o arquivo para escrita binario
+
+//   if (arquivo == NULL) {
+//     perror("Erro ao abrir o arquivo");
+//     return; // Retorna se nao for possível abrir o arquivo
+//   }
+
+//   // Escreve os dados das tarefas no arquivo
+//   size_t result = fwrite(tasks, sizeof(Task), taskCount, arquivo);
+
+//   // tratamento de erros
+//   if (result != taskCount) {
+//     perror("Erro ao escrever no arquivo\n");
+//     fclose(arquivo); // Fecha o arquivo para evitar algum problema com os dados
+//     return;
+//   }
+//   // Fecha o arquivo
+//   fclose(arquivo);
+// }
+
 /*
-// funcao para escrita do arquivo em binario
-void Escreve_bin() {
-  FILE *arquivo = fopen("tarefas", "wb"); // Abre o arquivo para escrita binario
-
-  if (arquivo == NULL) {
-    perror("Erro ao abrir o arquivo");
-    return; // Retorna se nao for possível abrir o arquivo
-  }
-
-  // Escreve os dados das tarefas no arquivo
-  size_t result = fwrite(tasks, sizeof(Task), taskCount, arquivo);
-
-  // tratamento de erros
-  if (result != taskCount) {
-    perror("Erro ao escrever no arquivo\n");
-    fclose(arquivo); // Fecha o arquivo para evitar algum problema com os dados
-    return;
-  }
-  // Fecha o arquivo
-  fclose(arquivo);
-}
-
 // funcao para ler o arquivo
 void Ler_bin() {
   FILE *arquivo =

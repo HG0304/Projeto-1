@@ -52,7 +52,8 @@ int main() {
       prioridade_categoria(lt);
       break;
     case 8: // deletar tarefa
-      
+      deletar(&lt);
+      break;  
     case 9:  // sair
       printf("Saindo do programa.\n");
       //Escreve_bin();
