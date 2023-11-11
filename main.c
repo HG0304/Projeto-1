@@ -49,7 +49,8 @@ int main() {
       categoria(lt);
       break;
     case 7: // Filtrar tarefa por prioridade e categoria
-
+      prioridade_categoria(lt);
+      break;
     case 8: // deletar tarefa
       
     case 9:  // sair
