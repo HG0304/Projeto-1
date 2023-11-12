@@ -26,5 +26,5 @@ int Escreve_bin(ListadeTarefas *lt);
 int Ler_bin(ListadeTarefas *lt);
 
 // To do
-int cria_txt(ListadeTarefas lt);
-int exporta(ListadeTarefas lt);
+int exporta_txt(Task filter[100], char* filtro, int len) ;
+// int cria_txt(ListadeTarefas lt);

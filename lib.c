@@ -6,7 +6,7 @@
 
 // Funcao para limpar o buffer e evitar erros na armazenagem dos dados e acumulo de lixo na memoria
 void limparBuffer() {
-    // Le e ignora os caracteres do buffer de entrada até encontrar "\n " ou atingir o final do arquivo (EOF)
+  // Le e ignora os caracteres do buffer de entrada até encontrar "\n " ou atingir o final do arquivo (EOF)
   int c;
   while ((c = getchar()) != '\n' && c != EOF) {
   }
@@ -157,6 +157,8 @@ int prioridade(ListadeTarefas lt){
     printf("\n_________________________________________\n");
     printf("____________Filtrar por Prioridade:_____________\n");
 
+    Task prioridade_filter[100];
+    
     int target_prioridade;
     printf("digite uma prioridade entre 0 e 10:\n-> ");
     scanf("%d", &target_prioridade);
@@ -182,11 +184,28 @@ int prioridade(ListadeTarefas lt){
           printf("Status: Cancelada\n");
         }
         printf("\n");
+
+        prioridade_filter[print] = lt.Task[i];
+
         print++;
       }
     }
     if (print == 0) {
     printf("Nao ha tarefas com essa prioridade\n");
+    }
+    else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[11] = "prioridade";
+        exporta_txt(prioridade_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
     }
   return 0;
 }
@@ -196,6 +215,7 @@ int status(ListadeTarefas lt){
   printf("\n_________________________________________\n");
   printf("____________Filtrar por Status:_____________\n");
 
+  Task status_filter[100];
   int target_status;
   printf("Digite o numero da prioridade que deseja filtrar:\n");
   printf("1 - Pendente\n");
@@ -232,12 +252,27 @@ int status(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+
+      status_filter[print] = lt.Task[i];
       print++;
     }
   }
   if (print == 0) {
     printf("Nao ha tarefas com esse status\n");
-  }
+  } else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[11] = "Estado";
+        exporta_txt(status_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
+    }
   return 0;
 }
 
@@ -246,6 +281,7 @@ int categoria(ListadeTarefas lt){
   printf("\n_________________________________________\n");
   printf("____________Filtrar por Categoria:_____________\n");
 
+  Task categoria_filter[100];
   char target_categoria[100];
   limparBuffer();
   printf("Digite a categoria que deseja filtrar:\n-> ");
@@ -278,11 +314,26 @@ int categoria(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+
+      categoria_filter[print] = lt.Task[i];
       print++;
     }
   }
   if (print == 0) {
     printf("Nao ha tarefas com essa categoria\n");
+  } else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[11] = "Categoria";
+        exporta_txt(categoria_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
     }
   return 0;
 }
@@ -291,6 +342,8 @@ int categoria(ListadeTarefas lt){
 int prioridade_categoria(ListadeTarefas lt){
   printf("\n_________________________________________\n");
   printf("____________Filtrar por Prioridade e Categoria:_____________\n");
+
+  Task prioridade_categoria_filter[100];
 
   char target_categoria[100];
   limparBuffer();
@@ -330,12 +383,26 @@ int prioridade_categoria(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+      prioridade_categoria_filter[print] = lt.Task[i];
       print++;
     }
   }
   if (print == 0) {
   printf("Nao ha tarefas com essa categoria e/ou prioridade\n");
-  }
+  } else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[21] = "Prioridade_Categoria";
+        exporta_txt(prioridade_categoria_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
+    }
   return 0;
 }
 
@@ -423,6 +490,47 @@ int Ler_bin(ListadeTarefas *lt) {
   fread(lt, sizeof(Task), lt -> taskCount, arquivo);
 
   printf("arquivo lido com sucesso");
+  fclose(arquivo);
+  return 0;
+}
+
+// Funcao para escrita do arquivos .txt
+int exporta_txt(Task filter[100], char* filtro, int len) {
+  printf("teste 1\n");
+  char path[100];
+  sprintf(path, "Tarefas/%s.txt", filtro);
+  FILE *arquivo = fopen(path, "w");
+
+  printf("arquivo criado com sucesso");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return 1;
+  }
+
+  for (int i = 0; i < len; i++) {
+    char estado[15];
+    if (filter[i].status == 0){
+      strcpy(estado, "Pendente");
+    }
+    else if (filter[i].status == 1) {
+      strcpy(estado, "Em andamento");
+    }
+    else if (filter[i].status == 2) {
+      strcpy(estado, "Concluida");
+    }
+    else if (filter[i].status == 3) {
+      strcpy(estado, "Cancelada");
+    }
+    fprintf(arquivo, "Tarefa %d:\nPrioridade: %d\nStatus: %s\nCategoria: %s\nDescrição: %s\n\n",
+            i + 1,
+            filter[i].prioridade,
+            estado,
+            filter[i].categoria,
+            filter[i].descricao
+            );
+  }
+
+  printf("arquivo escrito com sucesso");
   fclose(arquivo);
   return 0;
 }

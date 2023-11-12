@@ -26,7 +26,7 @@ int main() {
     printf("7. Filtrar tarefa por prioridade e categoria\n");
     printf("8. Deletar tarefa\n");
     printf("9. Sair\n");
-    printf("\n________________________________________\n");
+    printf("\n________________________________________\n\n");
 
     
     printf("Escolha uma opcao: ");
