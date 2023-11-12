@@ -6,7 +6,7 @@
 
 // Funcao para limpar o buffer e evitar erros na armazenagem dos dados e acumulo de lixo na memoria
 void limparBuffer() {
-    // Le e ignora os caracteres do buffer de entrada até encontrar "\n " ou atingir o final do arquivo (EOF)
+  // Le e ignora os caracteres do buffer de entrada até encontrar "\n " ou atingir o final do arquivo (EOF)
   int c;
   while ((c = getchar()) != '\n' && c != EOF) {
   }
@@ -17,13 +17,15 @@ int NovaTarefa(ListadeTarefas *lt) {
     printf("\n_________________________________________\n");
     printf("____________Cadastrar Tarefa:_____________\n");
 
-    Task *newTask = &(lt -> Task[lt -> taskCount]); // nova tarefa criada
+    // Tarefa criada na ultima posicao do array
+    Task *newTask = &(lt -> Task[lt -> taskCount]);
     
     limparBuffer();
     printf("Descricao:\n-> ");
+    // fgets para ler a string com espacos
     fgets(newTask -> descricao, sizeof(newTask -> descricao), stdin);
 
-    // Remove the newline character at the end of the string
+    // Removendo o \n do final da string
     newTask -> descricao[strcspn(newTask -> descricao, "\n")] = 0;    
 
     limparBuffer();
@@ -44,7 +46,6 @@ int NovaTarefa(ListadeTarefas *lt) {
     lt -> taskCount++;
 
     printf("Tarefa cadastrada com sucesso!\n");
-    // Escreve_bin(); // escreve no arquivo
   return 0;
 }
 
@@ -52,27 +53,23 @@ int NovaTarefa(ListadeTarefas *lt) {
 int listTasks(ListadeTarefas lt) {
   printf("\n_________________________________________\n");
   printf("____________Lista de Tarefas:_____________\n");
-
+  
   int print = 0;
   for (int i = 0; i < lt.taskCount; i++) { // Laço de repeticao para iterar sobre os dados da lista e printar eles
     printf("Tarefa %d:\n", i + 1);
     printf("\nDescricao: %s\n", lt.Task[i].descricao);
     printf("Categoria: %s\n", lt.Task[i].categoria);
     printf("Prioridade: %d\n", lt.Task[i].prioridade);
-    if (lt.Task[i].status == 0)
-    {
+    if (lt.Task[i].status == 0) {
       printf("Status: Pendente\n");
     }
-    else if (lt.Task[i].status == 1)
-    {
+    else if (lt.Task[i].status == 1) {
       printf("Status: Em andamento\n");
     }
-    else if (lt.Task[i].status == 2)
-    {
+    else if (lt.Task[i].status == 2) {
       printf("Status: Concluida\n");
     }
-    else if (lt.Task[i].status == 3)
-    {
+    else if (lt.Task[i].status == 3) {
       printf("Status: Cancelada\n");
     }
     printf("\n");
@@ -88,6 +85,7 @@ int editaTarefa(ListadeTarefas *lt){
     printf("\n_________________________________________\n");
     printf("____________Editar Tarefa:_____________\n");
 
+    // lista todas as tarefas existentes para que o usuario possa escolher qual deseja editar com base no indice
     listTasks(*lt);
 
     limparBuffer();
@@ -96,7 +94,8 @@ int editaTarefa(ListadeTarefas *lt){
     scanf("%d", &index);
     index--;
 
-    Task *EditTask = &(lt -> Task[index]); // tarefa desejada armazenada na variavel EditTask   
+    // tarefa desejada armazenada na variavel EditTask para facilitar a manipulacao
+    Task *EditTask = &(lt -> Task[index]);
 
     limparBuffer();
 
@@ -110,8 +109,8 @@ int editaTarefa(ListadeTarefas *lt){
     printf("-> ");
     scanf("%d", &opcao);
 
-    switch (opcao)
-    {
+    // switch case para escolher qual campo deseja alterar
+    switch (opcao) {
     case 1:
       limparBuffer();
       printf("Descricao:\n-> ");
@@ -158,41 +157,55 @@ int prioridade(ListadeTarefas lt){
     printf("\n_________________________________________\n");
     printf("____________Filtrar por Prioridade:_____________\n");
 
+    Task prioridade_filter[100];
+    
     int target_prioridade;
     printf("digite uma prioridade entre 0 e 10:\n-> ");
     scanf("%d", &target_prioridade);
 
     int print = 0;
-    for (int i = 0; i < lt.taskCount; i++)
-    {
+    for (int i = 0; i < lt.taskCount; i++){
       if (lt.Task[i].prioridade == target_prioridade)
       {
         printf("Tarefa %d:\n", i + 1);
         printf("\nDescricao: %s\n", lt.Task[i].descricao);
         printf("Categoria: %s\n", lt.Task[i].categoria);
         printf("Prioridade: %d\n", lt.Task[i].prioridade);
-        if (lt.Task[i].status == 0)
-        {
+        if (lt.Task[i].status == 0){
           printf("Status: Pendente\n");
         }
-        else if (lt.Task[i].status == 1)
-        {
+        else if (lt.Task[i].status == 1){
           printf("Status: Em andamento\n");
         }
-        else if (lt.Task[i].status == 2)
-        {
+        else if (lt.Task[i].status == 2){
           printf("Status: Concluida\n");
         }
-        else if (lt.Task[i].status == 3)
-        {
+        else if (lt.Task[i].status == 3){
           printf("Status: Cancelada\n");
         }
         printf("\n");
+
+        prioridade_filter[print] = lt.Task[i];
+
         print++;
       }
     }
     if (print == 0) {
     printf("Nao ha tarefas com essa prioridade\n");
+    }
+    else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[11] = "prioridade";
+        exporta_txt(prioridade_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
     }
   return 0;
 }
@@ -202,6 +215,7 @@ int status(ListadeTarefas lt){
   printf("\n_________________________________________\n");
   printf("____________Filtrar por Status:_____________\n");
 
+  Task status_filter[100];
   int target_status;
   printf("Digite o numero da prioridade que deseja filtrar:\n");
   printf("1 - Pendente\n");
@@ -238,12 +252,27 @@ int status(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+
+      status_filter[print] = lt.Task[i];
       print++;
     }
   }
   if (print == 0) {
     printf("Nao ha tarefas com esse status\n");
-  }
+  } else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[11] = "Estado";
+        exporta_txt(status_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
+    }
   return 0;
 }
 
@@ -252,6 +281,7 @@ int categoria(ListadeTarefas lt){
   printf("\n_________________________________________\n");
   printf("____________Filtrar por Categoria:_____________\n");
 
+  Task categoria_filter[100];
   char target_categoria[100];
   limparBuffer();
   printf("Digite a categoria que deseja filtrar:\n-> ");
@@ -284,11 +314,26 @@ int categoria(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+
+      categoria_filter[print] = lt.Task[i];
       print++;
     }
   }
   if (print == 0) {
     printf("Nao ha tarefas com essa categoria\n");
+  } else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[11] = "Categoria";
+        exporta_txt(categoria_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
     }
   return 0;
 }
@@ -297,6 +342,8 @@ int categoria(ListadeTarefas lt){
 int prioridade_categoria(ListadeTarefas lt){
   printf("\n_________________________________________\n");
   printf("____________Filtrar por Prioridade e Categoria:_____________\n");
+
+  Task prioridade_categoria_filter[100];
 
   char target_categoria[100];
   limparBuffer();
@@ -336,12 +383,26 @@ int prioridade_categoria(ListadeTarefas lt){
         printf("Status: Cancelada\n");
       }
       printf("\n");
+      prioridade_categoria_filter[print] = lt.Task[i];
       print++;
     }
   }
   if (print == 0) {
   printf("Nao ha tarefas com essa categoria e/ou prioridade\n");
-  }
+  } else {
+      printf("Voce deseja salvar as terefas encontradas em um arquivo txt?\n");
+      printf("Digite 1 para sim e 2 para não\n-> ");
+
+      limparBuffer();
+      int opcao;
+      scanf("%d", &opcao);
+      if (opcao == 1) {
+        char filtro[21] = "Prioridade_Categoria";
+        exporta_txt(prioridade_categoria_filter, filtro, print);
+        printf("Suas tarefas foram salvas com sucesso\n");
+        printf("Voce pode encontrar o arquivo na pasta Tarefas\n");
+      }
+    }
   return 0;
 }
 
@@ -350,15 +411,17 @@ int deletar(ListadeTarefas *lt) {
   printf("\n_________________________________________\n");
   printf("____________Deletar Tarefa:_____________\n");
 
+  // lista todas as tarefas existentes para que o usuario possa escolher qual deseja deletar com base no indice
   listTasks(*lt);
 
   limparBuffer();
   int index;
-  printf("indique o indicie de qual tarefa voce deseja deletar:\n-> ");
+  printf("Indique o indicie de qual tarefa voce deseja deletar:\n-> ");
   scanf("%d", &index);
   index--;
 
-  Task *DeleteTask = &(lt -> Task[index]); // tarefa desejada armazenada na variavel DeleteTask   
+  // tarefa desejada armazenada na variavel DeleteTask para facilitar a manipulacao
+  Task *DeleteTask = &(lt -> Task[index]); 
 
   // tratamento de erros
   if (DeleteTask == NULL) {
@@ -374,80 +437,100 @@ int deletar(ListadeTarefas *lt) {
   limparBuffer();
 
   printf("A tarefa %d foi deletada com sucesso!\n", index + 1);
-  for (int i = index; i < lt -> taskCount; i++)
-  {
+  for (int i = index; i < lt -> taskCount; i++){
     lt -> Task[i] = lt -> Task[i + 1];
   }
   lt -> taskCount--;
   return 0;
-
 }
 
-// funcao para filtrar tarefas por prioridade e categoria
-int exportar(ListadeTarefas lt){
+// Funcao para escrita do arquivo em binario
+int Escreve_bin(ListadeTarefas *lt) {
+  FILE *arquivo = fopen("Tarefas/ListaDeTarefas.bin", "wb"); // Abre o arquivo para escrita binario
+
+  // Tratamento de erros
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return 1;
+  }
+
+  // Escreve os dados das tarefas no arquivo
+  for (int i = 0; i < lt->taskCount; i++) {
+    if (lt -> Task[i].descricao[0] != '\0') { // Verifica se a tarefa foi criada
+      fwrite(&(lt -> Task[i]), sizeof(Task), 1, arquivo);
+    }
+  }
+
+  // Fecha o arquivo
+  fclose(arquivo);
   return 0;
 }
 
-// // para escrita e leitura em binario
-//  extern Task tasks[100]; // Declarando as variaveis como extern
-//  extern int taskCount;          // Declarando as variaveis como extern
-
-// // funcao para escrita do arquivo em binario
-// void Escreve_bin() {
-//   FILE *arquivo = fopen("tarefas", "wb"); // Abre o arquivo para escrita binario
-
-//   if (arquivo == NULL) {
-//     perror("Erro ao abrir o arquivo");
-//     return; // Retorna se nao for possível abrir o arquivo
-//   }
-
-//   // Escreve os dados das tarefas no arquivo
-//   size_t result = fwrite(tasks, sizeof(Task), taskCount, arquivo);
-
-//   // tratamento de erros
-//   if (result != taskCount) {
-//     perror("Erro ao escrever no arquivo\n");
-//     fclose(arquivo); // Fecha o arquivo para evitar algum problema com os dados
-//     return;
-//   }
-//   // Fecha o arquivo
-//   fclose(arquivo);
-// }
-
-/*
 // funcao para ler o arquivo
-void Ler_bin() {
-  FILE *arquivo =
-      fopen("tarefas", "rb"); // Abre o arquivo para leitura em binario
+int Ler_bin(ListadeTarefas *lt) {
+  FILE *arquivo = fopen("Tarefas/ListaDeTarefas.bin", "rb"); // Abre o arquivo para leitura em binario
 
   // tratamento de erros
   if (arquivo == NULL) {
     perror("Erro ao abrir o arquivo");
-    return;
+    return 1;
   }
 
   // antes de realizar a leitura do arquivo, precisamos obter o numero de
   // tarefas cadastradas nele, para isso vamos realizar 2 etapas: primeiro vamos
   // obter o tamanho do arquivo
-  fseek(arquivo, 0, SEEK_END); // Move o cursor de leitura para o final do
-                               // arquivo para obter o tamanho do arquivo.
+  fseek(arquivo, 0, SEEK_END);          // Move o cursor de leitura para o final do arquivo para obter o tamanho do arquivo.
   long tamanhoArquivo = ftell(arquivo); // Obtém o tamanho do arquivo em bytes
-  fseek(
-      arquivo, 0,
-      SEEK_SET); //  Move o cursor de leitura de volta para o início do arquivo
+  fseek(arquivo, 0, SEEK_SET);          // Move o cursor de leitura de volta para o início do arquivo
 
   // depois calculamos o numero de tarefas com base no tamanho do arquivo
-  taskCount = tamanhoArquivo / sizeof(Task);
+  lt -> taskCount = tamanhoArquivo / sizeof(Task);
 
   // Le os dados do arquivo e armazena no array original
-  size_t result = fread(tasks, sizeof(Task), taskCount, arquivo);
+  fread(lt, sizeof(Task), lt -> taskCount, arquivo);
 
-  if (result != taskCount) {
-    perror("Erro ao ler o arquivo");
-    return;
-  }
   printf("arquivo lido com sucesso");
   fclose(arquivo);
+  return 0;
 }
 
-*/
+// Funcao para escrita do arquivos .txt
+int exporta_txt(Task filter[100], char* filtro, int len) {
+  printf("teste 1\n");
+  char path[100];
+  sprintf(path, "Tarefas/%s.txt", filtro);
+  FILE *arquivo = fopen(path, "w");
+
+  printf("arquivo criado com sucesso");
+  if (arquivo == NULL) {
+    perror("Erro ao abrir o arquivo");
+    return 1;
+  }
+
+  for (int i = 0; i < len; i++) {
+    char estado[15];
+    if (filter[i].status == 0){
+      strcpy(estado, "Pendente");
+    }
+    else if (filter[i].status == 1) {
+      strcpy(estado, "Em andamento");
+    }
+    else if (filter[i].status == 2) {
+      strcpy(estado, "Concluida");
+    }
+    else if (filter[i].status == 3) {
+      strcpy(estado, "Cancelada");
+    }
+    fprintf(arquivo, "Tarefa %d:\nPrioridade: %d\nStatus: %s\nCategoria: %s\nDescrição: %s\n\n",
+            i + 1,
+            filter[i].prioridade,
+            estado,
+            filter[i].categoria,
+            filter[i].descricao
+            );
+  }
+
+  printf("arquivo escrito com sucesso");
+  fclose(arquivo);
+  return 0;
+}

@@ -16,14 +16,15 @@ typedef struct {
 int NovaTarefa(ListadeTarefas *lt);
 int editaTarefa(ListadeTarefas *lt);
 int listTasks(ListadeTarefas lt);
-void Escreve_bin();
-void Ler_bin();
 void limparBuffer();
 int prioridade(ListadeTarefas lt);
 int status(ListadeTarefas lt);
 int categoria(ListadeTarefas lt);
 int prioridade_categoria(ListadeTarefas lt);
 int deletar(ListadeTarefas *lt);
+int Escreve_bin(ListadeTarefas *lt);
+int Ler_bin(ListadeTarefas *lt);
 
 // To do
-int exportar(ListadeTarefas lt);
+int exporta_txt(Task filter[100], char* filtro, int len) ;
+// int cria_txt(ListadeTarefas lt);

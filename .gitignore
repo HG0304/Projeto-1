@@ -2,3 +2,7 @@ main.exe
 .vscode/settings.json
 .vscode/tasks.json
 .vscode/tasks.json
+Tarefas/ListaDeTarefas.bin
+Tarefas/prioridade.txt
+Tarefas/Estado.txt
+Tarefas/Categoria.txt
