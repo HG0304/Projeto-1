@@ -1,6 +1,6 @@
 # Lista de Tarefas - Parte 2
 
-Este é o estágio seguinte ao Projeto 1 da Lista de Tarefas, onde a continuação do desenvolvimento envolve a adição de novas funcionalidades ao código anteriormente entregue. É imprescindível salientar que esta etapa demanda um trabalho individual, construído a partir do código disponibilizado na primeira parte.
+Este é o estágio seguinte ao Projeto 1 da Lista de Tarefas, onde a continuação do desenvolvimento envolve a adição de novas funcionalidades ao código anteriormente entregue.
 
 ## Requisitos
 
@@ -25,4 +25,3 @@ O desenvolvimento da Lista de Tarefas deve abranger as seguintes funções:
 - **Exportar Tarefas por Categoria:** Semelhante à função anterior, mas as tarefas devem ser ordenadas por prioridade.
 - **Exportar Tarefas por Prioridade e Categoria:** Combinar as filtragens anteriores, mantendo o formato do arquivo a ser exportado.
 
-Além das adições mencionadas, é crucial ajustar as funções já implementadas para acomodar o armazenamento do estado de cada tarefa.
